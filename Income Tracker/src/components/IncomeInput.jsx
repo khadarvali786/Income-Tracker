@@ -11,7 +11,8 @@ const IncomeInput = () => {
   const income = useSelector((store)=>store.income);
   const dispatch = useDispatch()
 
-  const [data, setData] = useState(k);
+
+  const [data, setData] = useState([]);
   const [selectedInvestment, setSelectedInvestment] = useState(null);
   const now = new Date();
   const handleIncome = () => {
