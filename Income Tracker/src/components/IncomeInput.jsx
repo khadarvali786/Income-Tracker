@@ -5,15 +5,17 @@ import "./IncomeInput.css";
 import Investment from "./Investment";
 import InvestmentPlan from "./InvestmentPlan";
 import { useDispatch, useSelector } from "react-redux";
-import { incomeActions } from "../Store";
+import { dataActions, incomeActions } from "../Store";
+import { use } from "react";
 
 const IncomeInput = () => {
   const income = useSelector((store)=>store.income);
   const dispatch = useDispatch()
-
-
-  const [data, setData] = useState([]);
-  const [selectedInvestment, setSelectedInvestment] = useState(null);
+  const dataObj = useSelector((store)=>store.data);
+  const data = dataObj.data;
+  //const [data, setData] = useState([]);
+  const selectedInvestment = dataObj.investment;
+  //const [selectedInvestment, setSelectedInvestment] = useState(null);
   const now = new Date();
   const handleIncome = () => {
     if (!income || income <= 0) {
@@ -28,12 +30,14 @@ const IncomeInput = () => {
       investment: income * 0.2,
       month: date.format(now, "MMMM DD YYYY"),
     };
-    setData((prevdata) => [obj, ...prevdata]);
+    dispatch(dataActions.setData(obj))
+    //setData((prevdata) => [obj, ...prevdata]);
     dispatch(incomeActions.setIncome(0))
   };
   const handleInvesment = (investmentAmount) => {
-    setSelectedInvestment(investmentAmount);
+    dispatch(dataActions.setInvestment(investmentAmount))
   }
+
 
   return (
     <>
@@ -46,6 +50,7 @@ const IncomeInput = () => {
         id="income"
         name="income"
         value={income}
+        //Use separate fucntion for onChange value function to get the 
         onChange={(e) => dispatch(incomeActions.setIncome(e.target.valueAsNumber || ""))}
         required
       />
