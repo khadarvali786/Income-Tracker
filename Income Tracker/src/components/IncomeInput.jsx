@@ -87,7 +87,7 @@ const IncomeInput = () => {
 
           <h2>Reord Created</h2>
 
-          <table className="table ">
+          <table className="table">
             <thead>
               <tr>
                 <th>Enter Income</th>

@@ -1,11 +1,6 @@
 
   
   /* Investment Plan Container */
-  .table-wrapper {
-    width: 100%;
-    overflow-x: auto; /* Enable horizontal scroll for smaller screens */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile */
-  }
   .investment-plan {
     padding: 20px;
     font-family: 'Arial', sans-serif;
@@ -61,16 +56,6 @@
     background: #dc3545; /* Red */
     color: white;
     border: none;
-  }
-  /* Responsive Design for Mobile */
-@media (max-width: 600px) {
-    .table-wrapper {
-      margin: 0 auto; /* Center the scrollable container */
-    }
-  
-    .table {
-      min-width: 500px; /* Ensure the table does not shrink too much */
-    }
   }
   
   
