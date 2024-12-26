@@ -16,7 +16,7 @@ const port = process.env.PORT || 3001;
 const MONGODB = process.env.MONGO_URL;
 app.use(
   cors({
-    origin: ["http://localhost:5173"], // allow all origins
+    origin: ["https://income-tracker.onrender.com"], // allow all origins
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
