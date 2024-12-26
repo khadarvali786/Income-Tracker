@@ -43,6 +43,8 @@ module.exports.Login = async (req, res) => {
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Set true in production
+     sameSite: 'None', // Required for cross-origin requests
     });
     res
       .status(201)
