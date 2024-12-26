@@ -11,11 +11,11 @@ export const fetchDataFromDb = async () => {
   try {
     // const response = await api.get(`/getUserData?userId=${userId}`);
     //const response = await api.get("/data");
-    const response = await api.get("/getUserData",{
-        withCredentials: true,
+    const response = await api.get("/getUserData", {
+      withCredentials: true,
     });
-    console.log("response",response)
-    
+    console.log("response", response);
+
     return response.data; // Return fetched data
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -26,8 +26,8 @@ export const fetchDataFromDb = async () => {
 // Add investment data to the database
 export const addIncomeData = async (investmentData) => {
   try {
-    const response = await api.post("/insertData", investmentData,{
-        withCredentials: true,
+    const response = await api.post("/insertData", investmentData, {
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
@@ -51,6 +51,7 @@ export const updateInvestmentStatus = async (status) => {
 export const fetchUserInfo = async () => {
   try {
     const response = await api.post("/", {}, { withCredentials: true });
+    console.log("response", response);
     return response.data;
   } catch (error) {
     console.error("Error fetching user information:", error);
@@ -63,7 +64,7 @@ export const fetchUserInfo = async () => {
 export const logoutUser = async () => {
   try {
     const response = await api.post("/logout");
-    
+
     return response.data;
     // localStorage.removeItem('authToken'); // Optional: clear token from local storage
     // window.location.reload(); // Redirect or refresh the page after logout
