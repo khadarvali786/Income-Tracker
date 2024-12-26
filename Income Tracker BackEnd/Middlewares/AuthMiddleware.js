@@ -4,21 +4,30 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
 
-
 app.use(cookieParser());
 const jwt = require("jsonwebtoken");
 
 module.exports.userVerification = (req, res) => {
   const token = req.cookies.token;
+  console.log(`auth token: ${token} `);
+  console.log("ENV tokenKey", process.env.TOKEN_KEY);
   if (!token) {
     return res.json({ status: false });
   }
+  // console.log(`auth token: ${token} `);
+  // console.log("ENV tokenKey", process.env.TOKEN_KEY);
   jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+    console.log("decoded data", err, data);
     if (err) {
-      return res.json({ status: false });
+      return res.json({ status: false, error: err });
     } else {
       const user = await User.findById(data.id);
-      if (user) return res.json({ status: true, username: user.username ,userId:user._id});
+      if (user)
+        return res.json({
+          status: true,
+          username: user.username,
+          userId: user._id,
+        });
       else return res.json({ status: false });
     }
   });
@@ -39,5 +48,3 @@ module.exports.authenticate = async (req, res, next) => {
     res.status(401).json({ message: "Unauthorized" });
   }
 };
-
-
