@@ -63,7 +63,7 @@ const Login = () => {
     }
     try {
       const { data } = await axios.post(
-        "http://localhost:3001/login",
+        "https://income-tracker-server.onrender.com/login",
         formData,
         { withCredentials: true }
       );
@@ -71,7 +71,7 @@ const Login = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-            dispatch(fetchUserInformationThunk());
+          dispatch(fetchUserInformationThunk());
           navigate("/");
         }, 1000);
       } else {
@@ -156,7 +156,12 @@ const Login = () => {
           <button type="submit" className="btn btn-primary w-100">
             Login
           </button>
-          <p>Don't Have Account ? <Link to={"/signup"} className="Link_redirect">SignUp</Link></p>
+          <p>
+            Don't Have Account ?{" "}
+            <Link to={"/signup"} className="Link_redirect">
+              SignUp
+            </Link>
+          </p>
         </form>
       </div>
       <ToastContainer />

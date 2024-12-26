@@ -59,7 +59,7 @@ const SignUp = () => {
       }
     try {
       const { data } = await axios.post(
-        "http://localhost:3001/signup",
+        "https://income-tracker-server.onrender.com/signup",
         formData,
         { withCredentials: true }
       );
