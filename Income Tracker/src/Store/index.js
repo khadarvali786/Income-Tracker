@@ -1,8 +1,10 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { fetchDataFromDb, fetchUserInfo } from "../Services/api";
+import fetchStatusSlice, { fetchStatusActions } from "./fetchStatusSlice";
 
 const incomeSlice = createSlice({
   name: "income",
-  initialState: 0,
+  initialState: "",
   reducers: {
     setIncome: (state, action) => {
       return action.payload;
@@ -48,8 +50,29 @@ const dataSlice = createSlice({
         };
     //   return { ...state, investments: [...state.investments, action.payload] };
     },
+    alterInvestmentData:(state,action)=>{
+      console.log("alterInvestmentData"+JSON.stringify(action.payload));
+    },
+    setDbData:(state,action)=>{
+      return {...state,data:action.payload}
+    }
   },
 });
+
+const userSlice = createSlice({
+  name: "user",
+  initialState: {
+    user: null,
+  },
+  reducers: {
+    setUser: (state, action) => {
+      return {...state, user: action.payload };
+    },
+    clearUser: () => {
+      return { user: null };
+    },
+  },
+})
 
 const investmentSlice = createSlice({
   name: "investment",
@@ -90,11 +113,48 @@ const myStore = configureStore({
     income: incomeSlice.reducer,
     data: dataSlice.reducer,
     investment: investmentSlice.reducer,
+    user: userSlice.reducer,
+    fetchStatus:fetchStatusSlice.reducer
   },
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
+// Thunk to fetch data from the server
+export const fetchDataThunk = (userId) => async (dispatch) => {
+  try {
+    console.log('Fetching data from server:'+userId);
+    const data = await fetchDataFromDb();
+    console.log("Fetched data:", data); // Log the fetched data for debugging
+    dispatch(dataActions.setDbData(data)); // Dispatch the setData action
+  } catch (error) {
+    console.error("Error in fetchDataThunk:", error);
+  }
+};
+
+// Thunk to fetch userInformation
+export const fetchUserInformationThunk = () => async (dispatch) => {
+  try {
+    dispatch(fetchStatusActions.currentFetchStatusStarted());
+    const user = await fetchUserInfo(); 
+    console.log("User status:", user.status); // Check if the user is authenticated or not
+    if (user.status) {
+      console.log("Fetched user information:", user);
+      dispatch(fetchStatusActions.markFetchDone());
+      dispatch(userActions.setUser(user));
+      dispatch(fetchStatusActions.currentFetchStatusFinished());
+    } else {
+      console.log("User is not authenticated.");
+      dispatch(fetchStatusActions.markFetchDone());
+      dispatch(userActions.clearUser()); // Clear user state if not authenticated
+      dispatch(fetchStatusActions.currentFetchStatusFinished());
+    }
+  } catch (error) {
+    console.error("Error in fetchUserInformationThunk:", error);
+  }
+}
+
 export const incomeActions = incomeSlice.actions;
 export const dataActions = dataSlice.actions;
 export const investmentActions = investmentSlice.actions;
+export const userActions = userSlice.actions;
 export default myStore;

@@ -1,15 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import IncomeInput from "./components/IncomeInput";
 import Navbar from "./components/NavBar";
 import { Outlet } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInformationThunk } from "./Store";
+import Loader from "./components/Loader";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const fetchStatus = useSelector((store) => store.fetchStatus);
+
+  useEffect(() => {
+    console.log("FetchStatus", fetchStatus);
+    if (fetchStatus.fetchDone) return;
+    dispatch(fetchUserInformationThunk());
+  }, [fetchStatus]);
+
   return (
     <div>
-      <div>
-        <Navbar />
-      </div>
-      <Outlet/>
+      {fetchStatus.currentFetchStatus ? (
+        <Loader />
+      ) : (
+        <>
+          {" "}
+          <div>
+            <Navbar />
+          </div>
+          <Outlet />
+        </>
+      )}
     </div>
   );
 };

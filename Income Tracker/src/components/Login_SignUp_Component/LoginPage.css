@@ -1,0 +1,40 @@
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #9ae6ff, #c4effa);
+  padding: 20px;
+}
+
+.card {
+  max-width: 400px;
+  width: 100%;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.password-field .input-group {
+  position: relative;
+}
+.form-label{
+  color: black !important;
+}
+
+
+
+button.toggle-password {
+  cursor: pointer;
+  border:none !important;
+  font: 500;
+  font-size: 20px;
+  margin-left: 10px !important;
+  background-color: white;
+}
+
+/* button.toggle-password:hover {
+  color: #495057;
+} */
+
+.Link_redirect{
+  text-decoration: none;
+  font-weight: 600;
+  color: rgb(81, 140, 236) !important;
+}

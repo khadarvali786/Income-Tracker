@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./InvestmentTracker.css";
+import { fetchDataThunk } from "../Store";
 
 const Investment = () => {
-  const { investments } = useSelector((store) => store.data);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDataThunk()); // Fetch data on component mount
+  }, [dispatch]);
+  const { data } = useSelector((store) => store.data);
+   //check data.investmentStatus is empty and filter
+   const investments = data.filter(item => item.investmentStatus != "");
+  //  console.log("investmentdate added"+ JSON.stringify(investments));
+  // if(data.length > 0) {
+  //   return <h1>Data is there</h1>
+  // }
+ 
+  if (investments.length === 0)
+    return <h1 className="investment-tracker__no-data">No investments found</h1>;
   const totalAmount = investments.reduce(
-    (sum, investment) => sum + investment.investmentAmount,
+    (sum, investment) => sum + investment.investment,
     0
   );
-  if (investments.length === 0)
-    return <p className="investment-tracker__no-data">No investments found</p>;
   return (
     <div className="investment-tracker">
       <h1 className="investment-tracker__title">Investment Tracker</h1>
@@ -30,14 +42,14 @@ const Investment = () => {
           <tbody>
             {investments.map(
               ({
-                investmentId,
-                investmentAmount,
+                id,
+                investment,
                 investmentDate,
                 investmentStatus,
               }) => (
-                <tr key={investmentId}>
-                  <td>{investmentId}</td>
-                  <td>₹{investmentAmount.toFixed(2)}</td>
+                <tr key={id}>
+                  <td>{id}</td>
+                  <td>₹{investment.toFixed(2)}</td>
                   <td>{investmentDate}</td>
                   <td>{investmentStatus}</td>
                 </tr>
