@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 const Navbar = () => {
   const [cookies, removeCookie] = useCookies([])
   const { user } = useSelector((store) => store.user || {}); // Safeguard for undefined store.user
-  console.log('navbar', user);
+
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -22,10 +22,16 @@ const Navbar = () => {
   };
 
   const handleLogout = async() => {
-    const resposne = await logoutUser();
-    removeCookie("token");
-    window.location.reload();
-    console.log(resposne);
+    const response = await logoutUser();
+    if (response.status === 200) {
+      console.log('Logged out successfully');
+      window.location.reload(); // Reload the page after logout
+    } else {
+      console.error('Logout failed:', response.data);
+    }
+    // removeCookie("token");
+    // window.location.reload();
+    // console.log(resposne);
   };
 
   return (

@@ -55,8 +55,12 @@ module.exports.Login = async (req, res) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie("token", { httpOnly: true, secure: true });
-  res.status(200).json({ message: "User logged out successfully" });
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Match the settings used when setting the cookie
+    sameSite: 'None', // Required for cross-origin cookies
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
 };
 
 

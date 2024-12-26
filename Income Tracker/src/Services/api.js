@@ -64,10 +64,7 @@ export const fetchUserInfo = async () => {
 export const logoutUser = async () => {
   try {
     const response = await api.post("/logout");
-
     return response.data;
-    // localStorage.removeItem('authToken'); // Optional: clear token from local storage
-    // window.location.reload(); // Redirect or refresh the page after logout
   } catch (error) {
     console.error("Error logging out user:", error);
     throw error;
