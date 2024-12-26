@@ -1,0 +1,63 @@
+
+  
+  /* Investment Plan Container */
+  .investment-plan {
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    color: #333;
+    min-height: 100vh;
+  }
+  
+  .investment-plan h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #004c8c; /* Deep blue */
+  }
+  
+  .investment-plan h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #ffffff; /* Golden brown */
+  }
+
+  .table {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.9);
+}
+  
+  
+  /* Buttons in Invested Column */
+  .btn {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+  
+  .btn.yes {
+    background: #28a745; /* Green */
+    color: white;
+    border: none;
+  }
+  
+  .btn.no {
+    background: #dc3545; /* Red */
+    color: white;
+    border: none;
+  }
+  
+  
+
+  
