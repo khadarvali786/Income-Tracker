@@ -3,7 +3,7 @@ import { userActions } from "../Store";
 import { useDispatch } from "react-redux";
 
 const api = axios.create({
-  baseURL: "https://income-tracker-server.onrender.com/", // Replace with your backend URL
+  baseURL: "https://income-tracker-server.onrender.com", // Replace with your backend URL
 });
 
 // Fetch data from the database
