@@ -29,7 +29,6 @@ const InvestmentPlan = () => {
     //   investmentStatus: status,
     // };
     var ser2 =await updateInvestmentStatus(updatedStatus);
-    console.log(ser2);
     dispatch(fetchDataThunk());
     //dispatch(dataActions.updateInvestmentStatus(updatedStatus));
     // dispatch(dataActions.setInvestments(newInvestment));

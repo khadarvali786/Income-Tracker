@@ -37,7 +37,6 @@ const IncomeInput = () => {
   const dispatch = useDispatch();
   const dataObj = useSelector((store) => store.data);
   const { user } = useSelector((store) => store.user);
-  console.log(user);
   const data = dataObj.data;
   const selectedInvestment = dataObj.investment;
   const isEmpty = Object.keys(selectedInvestment).length === 0;
@@ -65,10 +64,8 @@ const IncomeInput = () => {
     };
     // var userLoggedIn = false; // Replace with actual login check
     if (user && user.status == true) {
-      console.log("user data adding in the account");
       const sec1 = await addIncomeData(obj);
       dispatch(fetchDataThunk());
-      console.log(sec1);
     } else {
       dispatch(dataActions.setData(obj));
     }
@@ -88,13 +85,11 @@ const IncomeInput = () => {
   };
 
   const handleLogin = () => {
-    console.log("Redirect to Login");
     navigate("/login");
     // Redirect or open login page
   };
 
   const handleSignup = () => {
-    console.log("Redirect to Signup");
     // Redirect or open signup page
     navigate("/signup");
   };

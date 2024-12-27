@@ -52,7 +52,6 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted: ", formData);
     if (formData.password !== formData.confirmPassword) {
         handleError("Passwords do not match!");
         return;
@@ -63,7 +62,6 @@ const SignUp = () => {
         formData,
         { withCredentials: true }
       );
-      console.log("data: " + JSON.stringify(data));
       const { success, message } = data;
       if (success) {
         handleSuccess(message);

@@ -66,7 +66,6 @@ export const logoutUser = async () => {
     const response = await api.get("/logout", {
       withCredentials: true, // Include credentials (cookies)
     });
-    console.log("response", response);
     return response.data;
   } catch (error) {
     console.error("Error logging out user:", error);

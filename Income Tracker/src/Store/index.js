@@ -27,7 +27,6 @@ const dataSlice = createSlice({
       return { ...state, data: [...state.data, action.payload] };
     },
     updateInvestmentStatus:(state ,action)=>{
-        console.log("Khadar: update"+JSON.stringify(action.payload));
         return {
             ...state,
             data: state.data.map((item)=>{
@@ -50,9 +49,9 @@ const dataSlice = createSlice({
         };
     //   return { ...state, investments: [...state.investments, action.payload] };
     },
-    alterInvestmentData:(state,action)=>{
-      console.log("alterInvestmentData"+JSON.stringify(action.payload));
-    },
+    // alterInvestmentData:(state,action)=>{
+    //   console.log("alterInvestmentData"+JSON.stringify(action.payload));
+    // },
     setDbData:(state,action)=>{
       return {...state,data:action.payload}
     }
