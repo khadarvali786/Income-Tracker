@@ -22,16 +22,8 @@ const Navbar = () => {
   };
 
   const handleLogout = async() => {
-    const response = await logoutUser();
-    if (response.status === 200) {
-      console.log('Logged out successfully');
+     await logoutUser();
       window.location.reload(); // Reload the page after logout
-    } else {
-      console.error('Logout failed:', response.data);
-    }
-    // removeCookie("token");
-    // window.location.reload();
-    // console.log(resposne);
   };
 
   return (

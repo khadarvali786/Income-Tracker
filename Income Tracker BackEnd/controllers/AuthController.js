@@ -59,6 +59,7 @@ module.exports.logout = (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Match the settings used when setting the cookie
     sameSite: 'None', // Required for cross-origin cookies
+    path: '/',
   });
   res.status(200).json({ message: 'Logged out successfully' });
 };
