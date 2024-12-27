@@ -5,6 +5,7 @@ import axios from "axios";
 import "./LoginPage.css";
 import { fetchUserInformationThunk } from "../../Store";
 import { useDispatch } from "react-redux";
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Login = () => {
     password: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(false); // Loader state
 
   //Toaster error message
   const handleError = (err) => {
@@ -56,19 +58,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Start the loader
 
     if (formData.password !== formData.confirmPassword) {
+      setIsLoading(false); // Stop the loader on validation error
       handleError("Passwords do not match!");
       return;
     }
+
     try {
       const { data } = await axios.post(
         "https://income-tracker-server.onrender.com/login",
         formData,
         { withCredentials: true }
       );
+
       const { success, message } = data;
       if (success) {
+        // Clear form fields
+        setFormData({
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
         handleSuccess(message);
         setTimeout(() => {
           dispatch(fetchUserInformationThunk());
@@ -78,14 +90,11 @@ const Login = () => {
         handleError(message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      handleError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false); // Stop the loader after the request completes
     }
-    // Clear form fields
-    setFormData({
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
   };
 
   return (
@@ -146,15 +155,19 @@ const Login = () => {
                 onClick={togglePassword}
               >
                 {passwordType === "password" ? (
-                  <i class="fa-solid fa-lock"></i>
+                  <i className="fa-solid fa-lock"></i>
                 ) : (
-                  <i class="fa-solid fa-lock-open"></i>
+                  <i className="fa-solid fa-lock-open"></i>
                 )}
               </button>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary w-100">
-            Login
+          <button
+            type="submit"
+            className="btn btn-primary w-100"
+            disabled={isLoading} // Disable button while loading
+          >
+            {isLoading ? "Loading..." : "Login"}
           </button>
           <p>
             Don't Have Account ?{" "}
@@ -165,6 +178,13 @@ const Login = () => {
         </form>
       </div>
       <ToastContainer />
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -16,6 +16,7 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(false); // Loader state
 
   const handleError = (err) => {
     toast.error(
@@ -31,13 +32,16 @@ const SignUp = () => {
   };
 
   const handleSuccess = (message) => {
-    toast.success( <div>
-      <span style={{ marginRight: "10px" }}>✅</span> {message}
-    </div>,{
-      position: "bottom-right",
-      autoClose: 3000,
-      icon: false,
-    });
+    toast.success(
+      <div>
+        <span style={{ marginRight: "10px" }}>✅</span> {message}
+      </div>,
+      {
+        position: "bottom-right",
+        autoClose: 3000,
+        icon: false,
+      }
+    );
   };
   const togglePassword = () => {
     setPasswordType((prevType) =>
@@ -52,10 +56,11 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (formData.password !== formData.confirmPassword) {
-        handleError("Passwords do not match!");
-        return;
-      }
+      handleError("Passwords do not match!");
+      return;
+    }
     try {
       const { data } = await axios.post(
         "https://income-tracker-server.onrender.com/signup",
@@ -64,9 +69,15 @@ const SignUp = () => {
       );
       const { success, message } = data;
       if (success) {
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
         handleSuccess(message);
         setTimeout(() => {
-            dispatch(fetchUserInformationThunk());
+          dispatch(fetchUserInformationThunk());
           navigate("/");
         }, 2000);
       } else {
@@ -74,14 +85,9 @@ const SignUp = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setFormData({
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
   };
 
   return (
@@ -137,7 +143,7 @@ const SignUp = () => {
             </div>
           </div>
           <div className="mb-3 password-field">
-          <label htmlFor="confirmPassword" className="form-label">
+            <label htmlFor="confirmPassword" className="form-label">
               Confirm Password
             </label>
             <div className="input-group">
@@ -165,14 +171,24 @@ const SignUp = () => {
             </div>
           </div>
           <button type="submit" className="btn btn-primary w-100">
-            Sign Up
+            {isLoading ? "Loading..." : "Sign Up"}
           </button>
           <span>
-            Already have an account? <Link className="Link_redirect" to="/login">Login</Link>
+            Already have an account?{" "}
+            <Link className="Link_redirect" to="/login">
+              Login
+            </Link>
           </span>
         </form>
       </div>
       <ToastContainer />
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
