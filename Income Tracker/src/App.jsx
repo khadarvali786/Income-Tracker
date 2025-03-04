@@ -11,6 +11,7 @@ const App = () => {
   const fetchStatus = useSelector((store) => store.fetchStatus);
 
   useEffect(() => {
+    console.log("fetStatus", fetchStatus);
     if (fetchStatus.fetchDone) return;
     dispatch(fetchUserInformationThunk());
   }, [fetchStatus]);

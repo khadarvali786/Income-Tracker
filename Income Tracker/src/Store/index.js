@@ -11,6 +11,28 @@ const incomeSlice = createSlice({
     },
   },
 });
+
+const expenseSlice = createSlice({
+  name: "expense",
+  initialState: {
+    loans:"",
+    cardBills:"",
+    policies:"",
+  },
+  reducers: {
+    setLoans: (state, action) => {
+      return { ...state, loans: action.payload };
+    },
+    setCardBills: (state, action) => {
+      return { ...state, cardBills: action.payload };
+    },
+    setPolicies: (state, action) => {
+      return { ...state, policies: action.payload };
+    },
+  }
+});
+
+
 const dataSlice = createSlice({
   name: "data",
   initialState: {
@@ -113,7 +135,9 @@ const myStore = configureStore({
     data: dataSlice.reducer,
     investment: investmentSlice.reducer,
     user: userSlice.reducer,
-    fetchStatus:fetchStatusSlice.reducer
+    fetchStatus:fetchStatusSlice.reducer,
+    expenses : expenseSlice.reducer,
+
   },
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
@@ -153,6 +177,7 @@ export const fetchUserInformationThunk = () => async (dispatch) => {
 }
 
 export const incomeActions = incomeSlice.actions;
+export const expenseActions = expenseSlice.actions;
 export const dataActions = dataSlice.actions;
 export const investmentActions = investmentSlice.actions;
 export const userActions = userSlice.actions;

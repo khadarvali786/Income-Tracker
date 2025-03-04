@@ -5,6 +5,7 @@ import axios from "axios";
 import "./LoginPage.css";
 import { fetchUserInformationThunk } from "../../Store";
 import { useDispatch } from "react-redux";
+import Loader from "../Loader";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -179,11 +180,7 @@ const Login = () => {
       </div>
       <ToastContainer />
       {isLoading && (
-        <div className="loading-overlay">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
+        <Loader/> 
       )}
     </div>
   );

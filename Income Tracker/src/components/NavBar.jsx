@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import './Navbar.css';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../Services/api';
-import { userActions } from '../Store';
+import React, { useEffect, useState } from "react";
+import "./Navbar.css";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../Services/api";
+import { userActions } from "../Store";
 import { useCookies } from "react-cookie";
 
 const Navbar = () => {
-  const [cookies, removeCookie] = useCookies([])
+  const [cookies, removeCookie] = useCookies([]);
   const { user } = useSelector((store) => store.user || {}); // Safeguard for undefined store.user
-
-
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -21,9 +19,9 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
-  const handleLogout = async() => {
-     await logoutUser();
-      window.location.reload(); // Reload the page after logout
+  const handleLogout = async () => {
+    await logoutUser();
+    window.location.reload(); // Reload the page after logout
   };
 
   return (
@@ -32,10 +30,11 @@ const Navbar = () => {
         <h4>Income App</h4>
       </div>
       <h2>
-        {user ? "Welcome " :' '}
-       {user?.username || ''} {/* Fallback to 'Guest' if user or username is not defined */}
+        {user ? "Welcome " : " "}
+        {user?.username || ""}{" "}
+        {/* Fallback to 'Guest' if user or username is not defined */}
       </h2>
-      <ul className={`navbar-links ${isOpen ? 'open' : ''}`}>
+      <ul className={`navbar-links ${isOpen ? "open" : ""}`}>
         <li>
           <Link to="/" onClick={closeMenu}>
             Home
@@ -43,7 +42,7 @@ const Navbar = () => {
         </li>
         <li>
           <Link to="" onClick={closeMenu}>
-            Income
+            Savings
           </Link>
         </li>
         <li>
@@ -51,16 +50,29 @@ const Navbar = () => {
             Investment
           </Link>
         </li>
-        <li>
+        {/* <li>
           <Link  onClick={closeMenu}>
             Contact
           </Link>
-        </li>
-        {user?.status && ( // Safeguard for user.status
+        </li> */}
+        {!user?.status && (
+          <>
+            <li>
+              <Link to="/login" onClick={closeMenu}>
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link to="/signup" onClick={closeMenu}>
+                Signup
+              </Link>
+            </li>
+          </>
+        )}
+
+        {user?.status && (
           <li>
-            <Link  onClick={handleLogout}>
-              Logout
-            </Link>
+            <Link onClick={handleLogout}>Logout</Link>
           </li>
         )}
       </ul>

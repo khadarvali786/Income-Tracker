@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   dataActions,
   fetchDataThunk,
-  fetchUserInformationThunk,
   incomeActions,
+  expenseActions,
 } from "../Store";
 import { addIncomeData } from "../Services/api";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +31,88 @@ const Modal = ({ onClose, onLogin, onSignup }) => {
   );
 };
 
+const InvestmentPlanModal = ({ onClose, investment, handelAllIncome }) => {
+  const expenses = useSelector((store) => store.expenses);
+  const dispatch = useDispatch();
+  return (
+    <div className="modal-overlay d-flex justify-content-center align-items-center">
+      <div className="modal-contents p-4 bg-white rounded shadow mt-5">
+        <i
+          className="fa-solid fa-xmark close-button position-absolute top-0 end-0 m-3"
+          onClick={onClose}
+        ></i>
+        <div className="p-1">
+          <div className="form-container">
+            <label htmlFor="income" className="form-label">
+              Do you have any ongoing Loans/CardBills/Policies
+            </label>
+            <div className="mb-3">
+              <label htmlFor="income" className="form-label">
+                Loans
+              </label>
+              <input
+                className="form-control border border-primary"
+                type="number"
+                id="emis"
+                name="emis"
+                required
+                placeholder="Enter EMI/Loan Amount"
+                value={expenses.loans}
+                onChange={(e) =>
+                  dispatch(
+                    expenseActions.setLoans(e.target.valueAsNumber || "")
+                  )
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="income" className="form-label">
+                Card Bills
+              </label>
+              <input
+                className="form-control border border-primary"
+                type="number"
+                id="cardBills"
+                name="cardBills"
+                placeholder="Enter Credit Card Bill Amount"
+                value={expenses.cardBills}
+                onChange={(e) =>
+                  dispatch(
+                    expenseActions.setCardBills(e.target.valueAsNumber || "")
+                  )
+                }
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="income" className="form-label">
+                Policies
+              </label>
+              <input
+                className="form-control border border-primary"
+                type="number"
+                id="policies"
+                name="policies"
+                placeholder="Enter Policies Amount"
+                value={expenses.policies}
+                onChange={(e) =>
+                  dispatch(
+                    expenseActions.setPolicies(e.target.valueAsNumber || "")
+                  )
+                }
+              />
+            </div>
+            <button
+              className="btn btn-primary w-100"
+              onClick={() => handelAllIncome(expenses)}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 const IncomeInput = () => {
   const navigate = useNavigate();
   const income = useSelector((store) => store.income);
@@ -42,6 +124,8 @@ const IncomeInput = () => {
   const isEmpty = Object.keys(selectedInvestment).length === 0;
   const now = new Date();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [investmentPlanModalOpen, setInvestmentPlanModalOpen] = useState(false);
+  const [error ,setErrorMessage] = useState("");
 
   useEffect(() => {
     if (user && user.status === true) {
@@ -53,9 +137,33 @@ const IncomeInput = () => {
       alert("Please enter a valid income amount");
       return;
     }
+    // var obj = {
+    //   id: uniqid(),
+    //   income: income,
+    //   needs: income * 0.5,
+    //   wants: income * 0.3,
+    //   investment: income * 0.2,
+    //   month: date.format(now, "MMMM DD YYYY"),
+    //   investmentStatus: "",
+    // };
+    // // var userLoggedIn = false; // Replace with actual login check
+    // if (user && user.status == true) {
+    //   const sec1 = await addIncomeData(obj);
+    //   dispatch(fetchDataThunk());
+    // } else {
+    //   dispatch(dataActions.setData(obj));
+    // }
+    // dispatch(incomeActions.setIncome(""));
+    setInvestmentPlanModalOpen(true);
+  };
+
+  const handelAllIncome = async (expenses) => {
+
+    let totalIncome =
+      income - expenses.loans - expenses.cardBills - expenses.policies;
     var obj = {
       id: uniqid(),
-      income: income,
+      income: totalIncome,
       needs: income * 0.5,
       wants: income * 0.3,
       investment: income * 0.2,
@@ -69,7 +177,11 @@ const IncomeInput = () => {
     } else {
       dispatch(dataActions.setData(obj));
     }
-    dispatch(incomeActions.setIncome(0));
+    dispatch(incomeActions.setIncome(""));
+    dispatch(expenseActions.setLoans(""));
+    dispatch(expenseActions.setCardBills(""));
+    dispatch(expenseActions.setPolicies(""));
+    setInvestmentPlanModalOpen(false);
   };
 
   const handleInvesment = (investmentAmount) => {
@@ -99,34 +211,35 @@ const IncomeInput = () => {
       <div className="table-wrapper">
         <div className="container">
           <h1>Income Allocation</h1>
-          <div className="form-container">
+          <div className="form-container mb-4 max-width-800">
             <label htmlFor="income">Enter Income Amount</label>
             <input
               type="number"
               id="income"
               name="income"
               value={income}
-              onChange={(e) =>
+              onChange={(e) =>{
+                var income = e.target.valueAsNumber || "";
+                if(income < 0 || income > 100000000){
+                  setErrorMessage("Income amount cannot exceed 9 digits");
+                }else{
+                  setErrorMessage("");
                 dispatch(incomeActions.setIncome(e.target.valueAsNumber || ""))
-              }
+                }
+              }}
               required
               placeholder="Enter Income"
+              min={5}
+              max={100000000}
             />
-            <button
-              type="submit"
-              className="calulate-button"
-              onClick={handleIncome}
-            >
-              Calculate
-            </button>
-          </div>
-          <h3 className="income-display">Your income is: {income}</h3>
-          <table className="table">
+            {error && <p className="text-danger">{error}</p>}
+            <h3 className="income-display">Your income is: {income}</h3>
+            <table className="table">
             <thead>
               <tr>
                 <th>Needs (50%)</th>
                 <th>Wants (30%)</th>
-                <th>Investment (20%)</th>
+                <th>Savings (20%)</th>
               </tr>
             </thead>
             <tbody>
@@ -137,7 +250,16 @@ const IncomeInput = () => {
               </tr>
             </tbody>
           </table>
-
+            <button
+              type="submit"
+              className="calulate-button"
+              onClick={handleIncome}
+            >
+              Calculate
+            </button>
+          </div>
+          
+  
           {data.length > 0 && (
             <>
               <h2>Record Created</h2>
@@ -147,7 +269,7 @@ const IncomeInput = () => {
                     <th>Enter Income</th>
                     <th>Needs</th>
                     <th>Wants</th>
-                    <th>Investment</th>
+                    <th>Savings</th>
                     <th>Month</th>
                   </tr>
                 </thead>
@@ -181,6 +303,12 @@ const IncomeInput = () => {
           onClose={closeModal}
           onLogin={handleLogin}
           onSignup={handleSignup}
+        />
+      )}
+      {investmentPlanModalOpen && (
+        <InvestmentPlanModal
+          onClose={() => setInvestmentPlanModalOpen(false)}
+          handelAllIncome={handelAllIncome}
         />
       )}
     </>
