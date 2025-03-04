@@ -13,7 +13,9 @@ module.exports.Signup = async (req, res, next) => {
     const token = createSecretToken(user._id);
     res.cookie("token", token, {
       withCredentials: true,
-      httpOnly: false,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Set true in production
+     sameSite: 'None', // Required for cross-origin requests
     });
     res
       .status(201)
@@ -39,10 +41,11 @@ module.exports.Login = async (req, res) => {
       return res.json({ message: "Incorrect password or email" });
     }
     const token = createSecretToken(user._id);
-    console.log("Token Creatation : " + token);
     res.cookie("token", token, {
       withCredentials: true,
-      httpOnly: false,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Set true in production
+     sameSite: 'None', // Required for cross-origin requests
     });
     res
       .status(201)
@@ -53,8 +56,13 @@ module.exports.Login = async (req, res) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie("token", { httpOnly: true, secure: true });
-  res.status(200).json({ message: "User logged out successfully" });
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Match the settings used when setting the cookie
+    sameSite: 'None', // Required for cross-origin cookies
+    path: '/',
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
 };
 
 

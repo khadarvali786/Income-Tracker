@@ -1,0 +1,53 @@
+/* Custom spinner sizes */
+.spinnerLoader{
+    margin: 18%;
+}
+.outer-spinner {
+    width: 100px !important;
+    height: 100px !important;
+    border-width: 3px !important;
+    animation: spin-clockwise 3s linear infinite !important;
+    padding: 10px;
+  }
+  
+  .medium-spinner {
+    width: 70px  !important;
+    height: 70px !important;
+    border-width: 3px !important;
+    animation: spin-counterclockwise 1s linear infinite !important;
+    
+    top: 50% ;
+    left: 50% ;
+    transform: translate(-50%, -50%) ;
+    padding: 10px;
+  }
+  
+  .small-spinner {
+    width: 40px !important;
+    height: 40px !important;
+    border-width: 3px !important;
+    animation: spin-clockwise 0.5s linear infinite !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Keyframes for clockwise spin */
+  @keyframes spin-clockwise {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Keyframes for counterclockwise spin */
+  @keyframes spin-counterclockwise {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
+  }
