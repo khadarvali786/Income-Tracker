@@ -3,9 +3,10 @@ import { userActions } from "../Store";
 import { useDispatch } from "react-redux";
 
 const api = axios.create({
-  //baseURL: "https://income-tracker-server.onrender.com", // Replace with your backend URL
+  //Server URL
+  baseURL: "https://income-tracker-server.onrender.com", 
   //localBackURL
-  baseURL: "http://localhost:3001",
+  //baseURL: "http://localhost:3001",
   
 });
 
